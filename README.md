@@ -1,57 +1,66 @@
-# Hi, I'm Spike 👋
+# Hi, I'm Spike
 
-**Backend Engineer · Go · Web3 Infrastructure · AI Agent Systems**
+I'm a backend engineer, mostly in Go. I build systems that have to keep their state correct when things fail: zk-rollup sequencers, Solana trading backends, Bitcoin indexers, and now agent runtimes.
 
-I am a backend engineer with 5 years of production experience, including 4+ years building Web3 infrastructure. My primary language is Go.
-
-I have owned production systems across Solana transaction processing, zk-rollup sequencing, multi-chain wallet execution, key-custody migration, and cross-chain fund workflows. I also build agent runtimes and protocol tooling for my own workflows.
+I have 5 years of production experience, 4+ of them in Web3 infrastructure.
 
 [Website](https://0xfakespike.github.io) · [X / Twitter](https://x.com/0xfakeSpike) · [Email](mailto:isyiming.zhang@icloud.com)
 
-## What I Build
+## What I'm building now
 
-- **Web3 infrastructure:** transaction pipelines, sequencing, deterministic state execution, proof orchestration, blockchain indexers, and wallet backends
-- **Solana systems:** block and transaction parsing, AMM integrations, pool discovery, quoting, routing, and instruction construction
-- **AI agent tooling:** planning and evaluation loops, MCP tools, CLI integrations, context management, execution traces, and human approval flows
+[**Ollupi**](https://github.com/0xfakeSpike/ollupi) is a Go agent framework for running many personal agents on shared infrastructure. Instead of giving each agent its own VM or container, it pools the runtime and writes every step to the database before executing it. A session waiting on a user costs only a database row, and a restart continues from where it stopped.
 
-## Production Experience
+Results from an 8 GB M1 with simulated models and tools, measured before the multi-user and sharding work:
 
-- Owned the backend architecture, implementation, APIs, and initial production operation of a Solana trading product at a cex.
-- Maintained the zk-rollup backend, including sequencing, deterministic state execution, proof orchestration, and BNB Chain settlement.
-
-> The projects below demonstrate the same interests through public, independently built software.
-
-## Featured Projects
-
-| Project | What it demonstrates |
+| Test | Result |
 | --- | --- |
-| [**SolRoute**](https://github.com/Solana-ZH/solroute) | Go SDK for direct Solana AMM interaction: pool discovery, quoting, route selection, and instruction construction across Raydium, Meteora, and PumpSwap. 50+ stars and a 2026 Solana Foundation ecosystem grant. |
-| [**Overheat**](https://github.com/OverheatSG) | Solana/EVM on-chain AI Oracle project built during a Solana hackathon. Developed Solana programs with Anchor/Rust and EVM smart contracts with Solidity. Won 2nd place as a four-person team and was presented at a Solana community meetup in Shanghai. |
-| [**atomicals-go**](https://github.com/atomicals-community/atomicals-go) | Crash-safe, fork-aware Bitcoin/Atomicals indexer with pruned-node and PostgreSQL support. Includes an FT-splitting proposal adopted into the protocol's official implementation. |
-| [**OctoSucker**](https://github.com/OctoSucker/OctoSucker) | Personal Go agent runtime with Planner–Executor–Evaluator execution, schema-validated tools, MCP and skills, structured trajectories, bounded recovery, and approval flows. |
-| [**KGgraph**](https://github.com/OctoSucker/KGgraph) | CLI/MCP graph memory for preserving private experience, retrieving multi-hop context, and keeping agent decisions explicit and consistent. |
-| [**polymarket-go**](https://github.com/0xfakeSpike/polymarket-go) | Go CLOB SDK, `pmctl` CLI, and native MCP server for Polymarket. Used in my own agent workflows and distributed through Homebrew. |
-| [**Iceberg**](https://github.com/Iceberg-trade/iceberg-core) | Arbitrum One privacy-swap hackathon prototype using Poseidon commitments, Merkle state, nullifiers, Groth16 verification, and 1inch execution. |
+| 50,000 parked sessions | About 14 MB of extra memory and 2.3 KB of disk per session |
+| 2,048 active sessions | Median turn 2% slower than running alone, using 407 MB of memory |
+| 3,000 turns submitted at once | No failures or 429s, finished within 1.03× of the theoretical minimum |
+| 90 random `kill -9`s | All 960 turns completed, and no tool call ran twice |
 
-## Current Focus
+The [method and raw results](https://github.com/0xfakeSpike/ollupi/tree/main/bench) are in the repo, along with a [comparison against pi and DeepSeek Harness](https://github.com/0xfakeSpike/ollupi/tree/main/bench/compare).
 
-- Reliable and inspectable agent runtimes
-- Agent-accessible financial and protocol tooling
-- Solana and Web3 transaction infrastructure
+Two related projects:
+
+- [**Ollupi Desktop**](https://github.com/0xfakeSpike/ollupi-desktop) is the macOS app built on Ollupi, with approvals, scheduled tasks, memory, a shared browser, and a Feishu bot for working from your phone.
+- [**coding-standards**](https://github.com/0xfakeSpike/coding-standards) is a Claude Code skill that holds agents to an opinionated set of engineering rules, in Chinese and English. *Now it's the AI's turn to suffer.*
+
+## Production experience
+
+- **zk-rollup:** Maintained the backend of [zkBNB](https://github.com/bnb-chain/zkbnb), including sequencing, deterministic state execution, proof orchestration, and BNB Chain settlement. I'm the project's second-largest contributor by commits.
+- **Solana trading:** Owned the backend architecture, implementation, APIs, and initial production operation of a Solana trading product at a centralized exchange.
+- **Wallets and funds:** Worked on multi-chain wallet execution, key-custody migration, and cross-chain fund workflows.
+
+## Open source
+
+| Project | What it is |
+| --- | --- |
+| [**atomicals-go**](https://github.com/atomicals-community/atomicals-go) | Crash-safe, fork-aware Atomicals indexer for Bitcoin that runs on a pruned node with PostgreSQL. Includes an FT-splitting proposal adopted into the protocol's official implementation. 88 stars. |
+| [**SolRoute**](https://github.com/Solana-ZH/solroute) | Go SDK for working with Solana AMMs directly: pool discovery, quoting, routing, and instruction building across Raydium, Meteora, and PumpSwap. 50+ stars and a 2026 Solana Foundation ecosystem grant. |
+| [**polymarket-go**](https://github.com/0xfakeSpike/polymarket-go) | Go SDK for the Polymarket CLOB, with the `pmctl` CLI and an MCP server. Installs through Homebrew. |
+| [**Global Liquidity Monitor**](https://0xfakespike.github.io/global_liquidity/) | Live dashboard of USD and JPY liquidity, Treasury markets, and cost of capital, built from public Fed, BOJ, and Treasury data. |
+
+**Hackathons:** [Overheat](https://github.com/OverheatSG) is an on-chain AI oracle for Solana and EVM that won 2nd place at a Solana hackathon with a four-person team. [Iceberg](https://github.com/Iceberg-trade/iceberg-core) is a privacy-swap prototype on Arbitrum One using Groth16 proofs and 1inch execution.
+
+## Writing
+
+Mostly in Chinese, on [my website](https://0xfakespike.github.io):
+
+- [AMM math, from CPMM to DLMM](https://0xfakespike.github.io/#/ammcpmmdlmm)
+- [Reading the Raydium CLMM and Meteora DLMM code](https://0xfakespike.github.io/#/raydiumclmmmeteoradlmm)
+- [Iceberg: a privacy swap built on ZK mixing](https://0xfakespike.github.io/#/iceberg-zkswap)
 
 ## Toolbox
 
-**Primary:** Go · PostgreSQL · Redis · Kafka · gRPC · REST · WebSockets
+- **Backend:** Go, PostgreSQL, SQLite, Redis, Kafka, gRPC, WebSockets
+- **Web3:** Solana, Bitcoin, EVM, zk-rollups, AMMs, wallet infrastructure
+- **Agents:** MCP, tool use, durable execution, context management, human approval flows
 
-**Web3:** Solana · Bitcoin · EVM · zk-rollups · AMMs · Wallet Infrastructure
+## Open to work
 
-**Agent Systems:** MCP · Tool Use · Planning / Evaluation · Context Management · Human-in-the-loop Workflows
-
-## Open to Work
-
-I am interested in backend roles involving:
+I'm interested in backend roles in:
 
 - AI agent infrastructure and developer tooling
 - Web3 infrastructure, wallets, indexers, and transaction systems
 - Privacy-preserving trading and execution infrastructure
-
