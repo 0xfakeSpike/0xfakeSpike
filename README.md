@@ -14,16 +14,17 @@ I have 5 years of production experience, 4+ of them in Web3 infrastructure.
 - **Recoverable at any moment.** After a restart, a release or a crash, sessions continue where they stopped. Tool calls distinguish `pending` from `inProgress`, so a payment or a message is never executed twice.
 - **Controlled concurrency.** Slots in one pool, model calls limited per connection to match the provider's account quota; bursts queue instead of failing.
 - **Multi-user and sharded.** One database is one shard; a lease keeps a single writer, a standby takes over when it exits, and each user gets their own slots, quota and sandbox. Commands, files and MCP servers go through `sandbox.Box` — seatbelt locally, and a cloud sandbox only takes implementing one interface.
-- **Measurable, not just benchmarked.** The repo ships a Harbor adapter so the same runtime can be run against Terminal-Bench and SWE-bench, alongside the scheduling and persistence benchmarks below. (Scores are not in yet — the adapter is.)
+- **Measurable, not just benchmarked.** Besides the scheduling and persistence benchmarks below, the repo runs Ollupi on Terminal-Bench 2.0 tasks through Harbor, to compare each version of the runtime with the last.
 
-Measured on an 8 GB M1 with simulated models and tools, before the multi-user and sharding work:
+Measured on Ollupi v0.18.0 (2026-11-19), on an 8 GB M1 with one SQLite database and simulated models and tools, one run each:
 
 | Test | Result |
 | --- | --- |
-| 50,000 parked sessions | About 14 MB of extra memory and 2.3 KB of disk per session, against 20 MB per session for one process per agent |
-| 2,048 active sessions | Median turn 2% slower than running alone, using 407 MB of memory |
-| 3,000 turns submitted at once | No failures or 429s, finished within 1.03× of the theoretical minimum |
-| 90 random `kill -9`s | All 960 turns completed, and no tool call ran twice |
+| 50,000 parked sessions | 34 MB of resident memory and about 7 KB of disk each, against 17.7 MB per session for one process per agent |
+| 1,536 active sessions | Median turn 5% slower than running alone. Past that, the store's single SQLite connection is the bottleneck, and shards split it: 4,096 sessions on 1, 2 and 4 shards run 84.9, 116.3 and 144.4 turns a second |
+| 3,000 turns submitted at once, quota 256 | All complete with no 429s, in 1.04× the time the quota allows; pi, pi-durable and DeepSeek Harness complete 483–1,764 |
+| One user filling every slot | With a per-user slot limit, other users wait 8 ms instead of 206 s |
+| 30 random `kill -9`s | All 600 turns completed, none of the 110 interrupted tool calls ran again, and a standby takes over a shard in 1.3 s |
 
 The [method and raw results](https://github.com/0xfakeSpike/ollupi/tree/main/bench) are in the repo, along with a [comparison against pi and DeepSeek Harness](https://github.com/0xfakeSpike/ollupi/tree/main/bench/compare); the [docs site](https://0xfakespike.github.io/ollupi-docs/) covers the protocol and client development in Chinese and English.
 
